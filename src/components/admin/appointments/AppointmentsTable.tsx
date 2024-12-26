@@ -14,7 +14,7 @@ export interface Appointment {
   patient: string;
   date: string;
   time: string;
-  unit: string;
+  //unit: string;
   status: string;
 }
 
@@ -32,7 +32,7 @@ export const AppointmentsTable = ({ appointments, onStatusUpdate }: Appointments
             <TableHead>Paciente</TableHead>
             <TableHead>Data</TableHead>
             <TableHead>Horário</TableHead>
-            <TableHead>Unidade</TableHead>
+            {/* <TableHead>Unidade</TableHead> */}
             <TableHead>Status</TableHead>
             <TableHead>Ações</TableHead>
           </TableRow>
@@ -43,7 +43,7 @@ export const AppointmentsTable = ({ appointments, onStatusUpdate }: Appointments
               <TableCell>{appointment.patient}</TableCell>
               <TableCell>{appointment.date}</TableCell>
               <TableCell>{appointment.time}</TableCell>
-              <TableCell>{appointment.unit}</TableCell>
+              {/* <TableCell>{appointment.unit}</TableCell> */}
               <TableCell>
                 <AppointmentStatusBadge status={appointment.status} />
               </TableCell>

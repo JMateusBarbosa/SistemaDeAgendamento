@@ -12,7 +12,7 @@ const AppointmentsTab = () => {
       patient: "João Silva",
       date: "2024-02-20",
       time: "14:30",
-      unit: "UBS Central",
+      //unit: "UBS Central",
       status: "Agendado",
     },
     {
@@ -20,7 +20,7 @@ const AppointmentsTab = () => {
       patient: "Maria Santos",
       date: "2024-02-21",
       time: "09:15",
-      unit: "UBS Norte",
+      //unit: "UBS Norte",
       status: "Concluído",
     },
   ];

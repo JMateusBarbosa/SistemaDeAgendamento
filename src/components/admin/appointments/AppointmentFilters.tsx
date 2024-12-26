@@ -12,7 +12,7 @@ import {
 export interface FilterValues {
   startDate: string;
   endDate: string;
-  unit: string;
+  //unit: string;
   status: string;
 }
 
@@ -30,7 +30,7 @@ export const AppointmentFilters = ({ onFilter }: AppointmentFiltersProps) => {
     onFilter({
       startDate,
       endDate,
-      unit: selectedUnit,
+      //unit: selectedUnit,
       status: selectedStatus,
     });
   };
@@ -53,6 +53,7 @@ export const AppointmentFilters = ({ onFilter }: AppointmentFiltersProps) => {
           onChange={(e) => setEndDate(e.target.value)}
         />
       </div>
+      {/* 
       <div>
         <label className="block text-sm font-medium mb-1">Unidade</label>
         <Select value={selectedUnit} onValueChange={setSelectedUnit}>
@@ -66,6 +67,7 @@ export const AppointmentFilters = ({ onFilter }: AppointmentFiltersProps) => {
           </SelectContent>
         </Select>
       </div>
+      */}
       <div>
         <label className="block text-sm font-medium mb-1">Status</label>
         <Select value={selectedStatus} onValueChange={setSelectedStatus}>

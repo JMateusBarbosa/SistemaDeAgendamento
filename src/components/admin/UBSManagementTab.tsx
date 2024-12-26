@@ -57,6 +57,7 @@ const UBSManagementTab = () => {
         </h2>
 
         <div className="space-y-6">
+          {/*  
           <div>
             <label className="block text-sm font-medium mb-2">
               Selecione a UBS
@@ -72,7 +73,7 @@ const UBSManagementTab = () => {
               </SelectContent>
             </Select>
           </div>
-
+        */}
           <div className="space-y-4">
             <h3 className="font-medium">Modalidades de Atendimento</h3>
             

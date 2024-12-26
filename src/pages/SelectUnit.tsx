@@ -25,6 +25,12 @@ const units = [
     address: "Rua Sul, 789 - Bairro Sul",
     availableSlots: 12,
   },
+  {
+    id: 4,
+    name: "UBS Oeste",
+    address: "Rua Oeste, 789 - Bairro Oeste",
+    availableSlots: 14,
+  },
 ];
 
 const SelectUnit = () => {
@@ -91,7 +97,7 @@ const SelectUnit = () => {
         <div className="mt-8 text-center">
           <Button
             variant="outline"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/agendar')}
             className="text-[#047c3c] border-[#047c3c] hover:bg-[#047c3c] hover:text-white"
           >
             Voltar
