@@ -1,50 +1,52 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { services } from "@/components/services/serviceData";
+import { PlusCircle, MinusCircle, Save } from "lucide-react";
 
 const UBSManagementTab = () => {
   const { toast } = useToast();
-  const [selectedUBS, setSelectedUBS] = useState("");
   const [servicesState, setServicesState] = useState(() => {
-    const initialState: Record<string, { checked: boolean; slots: string }> = {};
+    const initialState: Record<string, { enabled: boolean; slots: number }> = {};
     services.forEach(service => {
       initialState[service.name.toLowerCase().replace(/\s+/g, '_')] = {
-        checked: false,
-        slots: "0"
+        enabled: false,
+        slots: 0
       };
     });
     return initialState;
   });
 
-  const handleServiceChange = (serviceName: string, checked: boolean) => {
+  const handleSlotChange = (serviceName: string, increment: boolean) => {
     setServicesState(prev => ({
       ...prev,
-      [serviceName]: { ...prev[serviceName], checked },
+      [serviceName]: {
+        ...prev[serviceName],
+        slots: increment 
+          ? prev[serviceName].slots + 1 
+          : Math.max(0, prev[serviceName].slots - 1),
+      },
     }));
   };
 
-  const handleSlotsChange = (serviceName: string, slots: string) => {
+  const toggleService = (serviceName: string) => {
     setServicesState(prev => ({
       ...prev,
-      [serviceName]: { ...prev[serviceName], slots },
+      [serviceName]: {
+        ...prev[serviceName],
+        enabled: !prev[serviceName].enabled,
+      },
     }));
   };
 
-  const handleSave = () => {
-    console.log("Saving UBS configuration:", { selectedUBS, servicesState });
+  const handleSaveService = (serviceName: string) => {
+    console.log("Salvando configuração do serviço:", {
+      service: serviceName,
+      config: servicesState[serviceName]
+    });
     toast({
-      title: "Configurações salvas com sucesso!",
+      title: `Configurações de ${serviceName.replace(/_/g, ' ')} salvas com sucesso!`,
       variant: "default",
     });
   };
@@ -53,72 +55,74 @@ const UBSManagementTab = () => {
     <Card className="mt-6">
       <CardContent className="pt-6">
         <h2 className="text-xl font-semibold text-[#047c3c] mb-6">
-          Gerenciamento da Unidade Básica de Saúde
+          Gerenciamento de Vagas
         </h2>
 
         <div className="space-y-6">
-          {/*  
-          <div>
-            <label className="block text-sm font-medium mb-2">
-              Selecione a UBS
-            </label>
-            <Select value={selectedUBS} onValueChange={setSelectedUBS}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Selecione uma unidade" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ubs-central">UBS Central</SelectItem>
-                <SelectItem value="ubs-norte">UBS Norte</SelectItem>
-                <SelectItem value="ubs-sul">UBS Sul</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        */}
-          <div className="space-y-4">
-            <h3 className="font-medium">Modalidades de Atendimento</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {services.map((service) => {
-                const serviceKey = service.name.toLowerCase().replace(/\s+/g, '_');
-                return (
-                  <div key={service.name} className="flex items-center gap-4 bg-gray-50 p-3 rounded-lg">
-                    <div className="flex items-center space-x-2 flex-1">
-                      <Checkbox
-                        id={serviceKey}
-                        checked={servicesState[serviceKey]?.checked}
-                        onCheckedChange={(checked) => 
-                          handleServiceChange(serviceKey, checked as boolean)
-                        }
-                      />
-                      <label
-                        htmlFor={serviceKey}
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {service.name}
-                      </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {services.map((service) => {
+              const serviceKey = service.name.toLowerCase().replace(/\s+/g, '_');
+              const { enabled, slots } = servicesState[serviceKey];
+              
+              return (
+                <div 
+                  key={service.name} 
+                  className={`p-4 rounded-lg border ${
+                    enabled ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <service.icon className="w-5 h-5 text-[#047c3c]" />
+                      <h3 className="font-medium">{service.name}</h3>
                     </div>
-                    <Input
-                      type="number"
-                      min="0"
-                      value={servicesState[serviceKey]?.slots}
-                      onChange={(e) => handleSlotsChange(serviceKey, e.target.value)}
-                      className="w-24"
-                      placeholder="Vagas"
-                      disabled={!servicesState[serviceKey]?.checked}
-                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => toggleService(serviceKey)}
+                      className={enabled ? 'bg-green-100' : ''}
+                    >
+                      {enabled ? 'Ativo' : 'Inativo'}
+                    </Button>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">
+                      Vagas disponíveis: {slots}
+                    </span>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleSlotChange(serviceKey, false)}
+                        disabled={!enabled || slots === 0}
+                      >
+                        <MinusCircle className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => handleSlotChange(serviceKey, true)}
+                        disabled={!enabled}
+                      >
+                        <PlusCircle className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
 
-          <div className="pt-4">
-            <Button
-              onClick={handleSave}
-              className="w-full bg-[#047c3c] hover:bg-[#036830] text-white"
-            >
-              Salvar Alterações
-            </Button>
+                  <div className="mt-4">
+                    <Button
+                      onClick={() => handleSaveService(serviceKey)}
+                      className="w-full bg-[#047c3c] hover:bg-[#036830] text-white"
+                      size="sm"
+                    >
+                      <Save className="w-4 h-4 mr-2" />
+                      Salvar Alterações
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </CardContent>
