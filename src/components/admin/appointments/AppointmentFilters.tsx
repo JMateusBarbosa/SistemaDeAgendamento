@@ -13,6 +13,7 @@ export interface FilterValues {
   startDate: string;
   endDate: string;
   status: string;
+  serviceType: string;
 }
 
 interface AppointmentFiltersProps {
@@ -23,17 +24,19 @@ export const AppointmentFilters = ({ onFilter }: AppointmentFiltersProps) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedServiceType, setSelectedServiceType] = useState("");
 
   const handleFilter = () => {
     onFilter({
       startDate,
       endDate,
       status: selectedStatus,
+      serviceType: selectedServiceType,
     });
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div>
         <label className="block text-sm font-medium mb-1">De</label>
         <Input
@@ -64,7 +67,20 @@ export const AppointmentFilters = ({ onFilter }: AppointmentFiltersProps) => {
           </SelectContent>
         </Select>
       </div>
-      <div className="flex items-end md:col-span-3">
+      <div>
+        <label className="block text-sm font-medium mb-1">Modalidade</label>
+        <Select value={selectedServiceType} onValueChange={setSelectedServiceType}>
+          <SelectTrigger>
+            <SelectValue placeholder="Selecione a modalidade" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="medico">Médico Geral</SelectItem>
+            <SelectItem value="dentista">Dentista</SelectItem>
+            <SelectItem value="psicologo">Psicólogo</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="md:col-span-4">
         <Button 
           className="w-full bg-[#047c3c] hover:bg-[#036830]"
           onClick={handleFilter}

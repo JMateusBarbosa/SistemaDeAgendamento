@@ -13,6 +13,10 @@ const AppointmentsTab = () => {
       date: "2024-02-20",
       time: "14:30",
       status: "Agendado",
+      serviceType: "Médico Geral",
+      susCard: "123456789012345",
+      createdAt: "2024-02-19T10:00:00Z",
+      updatedAt: "2024-02-19T10:00:00Z",
     },
     {
       id: 2,
@@ -20,6 +24,10 @@ const AppointmentsTab = () => {
       date: "2024-02-21",
       time: "09:15",
       status: "Concluído",
+      serviceType: "Dentista",
+      susCard: "987654321098765",
+      createdAt: "2024-02-19T11:30:00Z",
+      updatedAt: "2024-02-19T11:30:00Z",
     },
   ];
 

@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { ubs, logout } = useAuth();
 
   return (
     <nav className="fixed top-0 w-full bg-white shadow-sm z-50">
@@ -21,12 +24,24 @@ const Navbar = () => {
             <Link to="/agendar" className="text-gray-700 hover:text-[#047c3c] transition-colors">
               Agendar Consulta
             </Link>
-            <Link to="/admin" className="text-gray-700 hover:text-[#047c3c] transition-colors">
-              Meus Agendamentos
-            </Link>
-            <Link to="/login" className="text-gray-700 hover:text-[#047c3c] transition-colors">
-              Login
-            </Link>
+            {ubs ? (
+              <>
+                <Link to="/admin" className="text-gray-700 hover:text-[#047c3c] transition-colors">
+                  Meus Agendamentos
+                </Link>
+                <Button
+                  variant="ghost"
+                  onClick={logout}
+                  className="text-gray-700 hover:text-[#047c3c] transition-colors"
+                >
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <Link to="/login" className="text-gray-700 hover:text-[#047c3c] transition-colors">
+                Login
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -55,20 +70,35 @@ const Navbar = () => {
             >
               Agendar Consulta
             </Link>
-            <Link 
-              to="/admin" 
-              className="block text-gray-700 hover:text-[#047c3c] transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Meus Agendamentos
-            </Link>
-            <Link 
-              to="/login" 
-              className="block text-gray-700 hover:text-[#047c3c] transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Login
-            </Link>
+            {ubs ? (
+              <>
+                <Link 
+                  to="/admin" 
+                  className="block text-gray-700 hover:text-[#047c3c] transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Meus Agendamentos
+                </Link>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    logout();
+                    setIsMenuOpen(false);
+                  }}
+                  className="text-gray-700 hover:text-[#047c3c] transition-colors w-full justify-start"
+                >
+                  Sair
+                </Button>
+              </>
+            ) : (
+              <Link 
+                to="/login" 
+                className="block text-gray-700 hover:text-[#047c3c] transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Login
+              </Link>
+            )}
           </div>
         )}
       </div>

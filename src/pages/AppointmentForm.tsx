@@ -1,36 +1,24 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 
 const AppointmentForm = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { toast } = useToast();
-  const { serviceId, unitId } = location.state || {};
 
   const [formData, setFormData] = useState({
     fullName: "",
-    cpf: "",
-    address: "",
-    reason: "",
+    susCard: "",
     email: "",
   });
 
-  if (!serviceId || !unitId) {
-    navigate('/agendar');
-    return null;
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    // For now, we'll just show a success message
     toast({
       title: "Agendamento realizado com sucesso!",
       description: "Você receberá um e-mail com a confirmação.",
@@ -39,7 +27,7 @@ const AppointmentForm = () => {
     navigate('/');
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -77,49 +65,23 @@ const AppointmentForm = () => {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="cpf" className="block text-sm font-medium text-gray-700">
-                  CPF
+                <label htmlFor="susCard" className="block text-sm font-medium text-gray-700">
+                  Número do Cartão SUS
                 </label>
                 <Input
-                  id="cpf"
-                  name="cpf"
-                  value={formData.cpf}
+                  id="susCard"
+                  name="susCard"
+                  value={formData.susCard}
                   onChange={handleInputChange}
                   required
-                  pattern="\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11}"
-                  title="Digite um CPF válido"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-                  Endereço Completo
-                </label>
-                <Input
-                  id="address"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="reason" className="block text-sm font-medium text-gray-700">
-                  Motivo da Consulta
-                </label>
-                <Textarea
-                  id="reason"
-                  name="reason"
-                  value={formData.reason}
-                  onChange={handleInputChange}
-                  required
+                  pattern="\d{15}"
+                  title="Digite um número de cartão SUS válido (15 dígitos)"
                 />
               </div>
 
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  E-mail
+                  Email
                 </label>
                 <Input
                   id="email"
@@ -135,7 +97,7 @@ const AppointmentForm = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => navigate(-1)}
+                  onClick={() => navigate('/agendar')}
                   className="text-[#047c3c] border-[#047c3c] hover:bg-[#047c3c] hover:text-white"
                 >
                   Voltar
